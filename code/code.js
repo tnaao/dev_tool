@@ -358,8 +358,8 @@ $(function () {
                 }
                 else if (typeof element === 'number') {
                   if (Number.isInteger(element)) {
-                    toType = shouldEnhanceFaultTolerance ? `int.tryParse(json[${jsonKey}]?.toString() ?? '')` : `json[${jsonKey}]?.toInt()`;
-                    type = 'int';
+                    toType = shouldEnhanceFaultTolerance ? `num.tryParse(json[${jsonKey}]?.toString() ?? '')` : `json[${jsonKey}]`;
+                    type = 'num';
                   } else {
                     toType = shouldEnhanceFaultTolerance ? `double.tryParse(json[${jsonKey}]?.toString() ?? '')` : `json[${jsonKey}]?.toDouble()`;
                     type = 'double';
