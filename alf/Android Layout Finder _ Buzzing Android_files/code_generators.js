@@ -369,9 +369,9 @@ function getJavadocComment( tabs, text ) {
 		result += " * <br />\n";
 	}
 	var date = new Date();
-	result += " * Auto-created on " + date.getFullYear() + "-" + zeropad( date.getMonth()+1, 2 ) + "-" + zeropad( date.getDate(), 2 ) + " " + zeropad( date.getHours(), 2 ) + ":" + zeropad( date.getMinutes(), 2 ) + ":" + zeropad( date.getSeconds(), 2 );
-	result += " by Android Layout Finder\n";
-	result += " * (http://www.buzzingandroid.com/tools/android-layout-finder)\n";
+	// result += " * Auto-created on " + date.getFullYear() + "-" + zeropad( date.getMonth()+1, 2 ) + "-" + zeropad( date.getDate(), 2 ) + " " + zeropad( date.getHours(), 2 ) + ":" + zeropad( date.getMinutes(), 2 ) + ":" + zeropad( date.getSeconds(), 2 );
+	// result += " by Android Layout Finder\n";
+	// result += " * (http://www.buzzingandroid.com/tools/android-layout-finder)\n";
 	result += " */";
 	
 		
