@@ -70,7 +70,7 @@ function generateJavaFromTreeMv(selected) {
 		}
 	}
 	
-	if ( clicklisteners && buttons.length > 0 ) {
+	if (false&&  clicklisteners && buttons.length > 0 ) {
 		result += "\n";
 		for ( var i = 0; i < buttons.length; i++ ) {
 			var btn = buttons[i];
@@ -80,7 +80,7 @@ function generateJavaFromTreeMv(selected) {
 	
 	result += "\t}\n";
 	
-	if ( clicklisteners && buttons.length > 0 ) {
+	if (false && clicklisteners && buttons.length > 0 ) {
 		result += "\n";
 		result += getJavadocComment( 1, "Handle button click events" ) + "\n";
 		result += "\t@Override\n";
