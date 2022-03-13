@@ -128,7 +128,7 @@ function generateJavaFromTreeVh(selected, root, forceRoot) {
 	console.log( selected );
 	
 	var result = getJavadocComment( 0, className + " class for layout."  ) + "\n";
-	result += visibility + "static class "+className+" {\n";
+	result += visibility + " class "+className+" {\n";
 
 	if ( forceRoot ) {
 		var rootSelected = false;
@@ -151,50 +151,19 @@ function generateJavaFromTreeVh(selected, root, forceRoot) {
 	
 	for ( var i = 0; i < selected.length; i++ ) {
 		var node = selected[i];
-		result += "\tpublic final " + node.className + " " + node.varName + ";\n";
+		result += "\tpublic " + node.className + " " + node.varName + ";\n";
 	}
 	result += "\n";
-	result += "\t" + visibility + className+"(";
-//	if ( !rootSelected ) {
-//		result += root.className + " rootView, ";
-//	}
-	for ( var i = 0; i < selected.length; i++ ) {
-		var node = selected[i];
-		result += node.className + " " + node.varName;
-		if ( i < selected.length - 1 ) {
-			result += ", ";
-		}
-	}
-	result += ") {\n";
-	for ( var i = 0; i < selected.length; i++ ) {
-		var node = selected[i];
-		result += "\t\tthis." + node.varName + " = " + node.varName + ";\n";
-	}
-	
-	result += "\t}\n\n";
 	
 	var parentview_dot = root.var_id == "" ? "" : root.var_id+".";
-	result += "\tpublic static "+className+" create("+root.className+" "+root.var_id+") {\n";
+	result += "\tpublic void findViews("+root.className+" "+root.var_id+") {\n";
 	for ( var i = 0; i < selected.length; i++ ) {
 		var node = selected[i];
 		if ( node["is_root"] ) {
 			continue;
 		}
 		result += "\t\t" + node.className + " " + node.varName + " = (" + node.className + ")" + getFindViewCode( parentview_dot, node ) + ";\n";
-	}		
-	
-	result += "\t\treturn new "+className+"( ";
-//	if ( !rootSelected ) {
-//		result += parentview + ", ";
-//	}
-	for ( var i = 0; i < selected.length; i++ ) {
-		var node = selected[i];
-		result += node.varName;
-		if ( i < selected.length - 1 ) {
-			result += ", ";
-		}
 	}
-	result += " );\n";
 	
 	result += "\t}\n";
 	
