@@ -162,7 +162,7 @@ function generateJavaFromTreeVh(selected, root, forceRoot) {
 		if ( node["is_root"] ) {
 			continue;
 		}
-		result += "\t\t" + node.className + " " + node.varName + " = (" + node.className + ")" + getFindViewCode( parentview_dot, node ) + ";\n";
+		result += "\t\t" + " " + node.varName + " = (" + node.className + ")" + getFindViewCode( parentview_dot, node ) + ";\n";
 	}
 	
 	result += "\t}\n";
