@@ -573,7 +573,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
           if (description !== undefined) {
             this.emitDescription(description);
           }
-          //类型判断
+          //类型判断,type == 'int' || type == 'double' || type == 'String' || type == 'bool' || type == 'DateTime'
           const isDynamic = typeof type == 'object' && type["kind"] === "annotated";
           const isAClass = typeof type == 'object';
           const isDateTime = type == 'DateTime';
