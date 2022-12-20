@@ -363,6 +363,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
 
   protected emitFileHeader(): void {
     this.ensureBlankLine();
+    this.emitLine("import 'package:mxbase/ext/json_ext.dart';");
   }
 
   protected emitBlock(line: Sourcelike, f: () => void): void {
@@ -555,16 +556,23 @@ export class CustomDartRenderer extends ConvenienceRenderer {
         this.forEachClassProperty(c, "none", (name, jsonName, property) => {
 
           const description = this.descriptionForClassProperty(c, jsonName);
+          const type = this.dartType(property.type, true);
 
           if (this.customDartOption.useSerializable && jsonName !== name.namingFunction.nameStyle(jsonName)) {
             this.ensureBlankLine();
-            this.emitLine("@JsonKey(name: '", jsonName, "') ");
+            if(type == 'int')
+            {
+              this.emitLine("@JsonKey(name: '", jsonName, "', fromJson: JsonExt.dynamicToInt) ");
+            }else if(type == 'double'){
+              this.emitLine("@JsonKey(name: '", jsonName, "', fromJson: JsonExt.dynamicToDouble) ");
+            }else{
+              this.emitLine("@JsonKey(name: '", jsonName, "') ");
+            }
           }
 
           if (description !== undefined) {
             this.emitDescription(description);
           }
-          const type = this.dartType(property.type, true);
           //
           const isDynamic = typeof type == 'object' && type["kind"] === "annotated";
           const isAClass = typeof type == 'object';
