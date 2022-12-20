@@ -630,7 +630,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
 
     this.emitBlock(["data class ", className], () => {
       if (c.getProperties().size === 0) {
-        this.emitLine(className, ")");
+        this.emitLine("/* No properties */");
       } else {
         this.indent(() => {
           this.forEachClassProperty(c, "none", (name, _, _p) => {
