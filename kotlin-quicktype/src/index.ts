@@ -12,7 +12,7 @@ export type CustomDartOption = {
 }
 
 export async function runQuickType(className: string, jsonString: string, dartOptions: CustomDartOption): Promise<string> {
-  const jsonInput = jsonInputForTargetLanguage("dart");
+  const jsonInput = jsonInputForTargetLanguage("kotlin");
   await jsonInput.addSource({
     name: className,
     samples: [jsonString],
