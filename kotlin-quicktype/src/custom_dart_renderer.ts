@@ -628,7 +628,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
   protected emitClassDefinition(c: ClassType, className: Name): void {
     this.emitDescription(this.descriptionForType(c));
 
-    this.emitBlock(["class ", className], () => {
+    this.emitBlock(["data class ", className], () => {
       if (c.getProperties().size === 0) {
         this.emitLine(className, ")");
       } else {
@@ -636,7 +636,6 @@ export class CustomDartRenderer extends ConvenienceRenderer {
           this.forEachClassProperty(c, "none", (name, _, _p) => {
           });
         });
-        this.ensureBlankLine();
 
         this.forEachClassProperty(c, "none", (name, jsonName, property) => {
 
