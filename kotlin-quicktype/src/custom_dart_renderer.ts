@@ -151,7 +151,7 @@ export class CustomDartTargetLanguage extends TargetLanguage {
   }
 }
 
-const keywords = [
+const keywordsDart = [
   "abstract",
   "do",
   "import",
@@ -221,6 +221,58 @@ const keywords = [
   "toJson",
   "fromMap",
   "toMap",
+];
+
+const keywords = [
+  "package",
+  "as",
+  "typealias",
+  "class",
+  "this",
+  "super",
+  "val",
+  "var",
+  "fun",
+  "for",
+  "null",
+  "true",
+  "false",
+  "is",
+  "in",
+  "throw",
+  "return",
+  "break",
+  "continue",
+  "object",
+  "if",
+  "try",
+  "else",
+  "while",
+  "do",
+  "when",
+  "interface",
+  "typeof",
+  "klaxon",
+  "toJson",
+  "Any",
+  "Boolean",
+  "Double",
+  "Float",
+  "Long",
+  "Int",
+  "Short",
+  "System",
+  "Byte",
+  "String",
+  "Array",
+  "List",
+  "Map",
+  "Enum",
+  "Class",
+  "JsonObject",
+  "JsonValue",
+  "Converter",
+  "Klaxon"
 ];
 
 const typeNamingFunction = funPrefixNamer("types", (n) => dartNameStyle(true, false, n));
