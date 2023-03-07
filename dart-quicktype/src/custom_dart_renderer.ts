@@ -558,7 +558,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
           const description = this.descriptionForClassProperty(c, jsonName);
           const type = this.dartType(property.type, true);
 
-          if (this.customDartOption.useSerializable && jsonName !== name.namingFunction.nameStyle(jsonName)) {
+          if (this.customDartOption.useSerializable) {
             this.ensureBlankLine();
             if(type == 'int')
             {
