@@ -565,8 +565,12 @@ export class CustomDartRenderer extends ConvenienceRenderer {
               this.emitLine("@JsonKey(name: '", jsonName, "', fromJson: JsonExt.dynamicToInt) ");
             }else if(type == 'double'){
               this.emitLine("@JsonKey(name: '", jsonName, "', fromJson: JsonExt.dynamicToDouble) ");
+            }else if(type == 'String'){
+              this.emitLine("@JsonKey(name: '", jsonName, "', fromJson: JsonExt.dynamicToString) ");
             }else{
-              this.emitLine("@JsonKey(name: '", jsonName, "') ");
+              if(jsonName !== name.namingFunction.nameStyle(jsonName)){
+                this.emitLine("@JsonKey(name: '", jsonName, "') ");
+              }
             }
           }
 
