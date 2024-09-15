@@ -8,41 +8,37 @@ import { DependencyName, funPrefixNamer, Name, Namer } from "quicktype-core/dist
 import { RenderContext } from "quicktype-core/dist/Renderer";
 import {
   BooleanOption,
+  EnumOption,
   getOptionValues,
   Option,
   OptionValues,
-  StringOption,
-  EnumOption
+  StringOption
 } from "quicktype-core/dist/RendererOptions";
-import { maybeAnnotated, modifySource, Sourcelike } from "quicktype-core/dist/Source";
+import { maybeAnnotated, Sourcelike } from "quicktype-core/dist/Source";
 import {
   allLowerWordStyle,
   allUpperWordStyle,
   combineWords,
-  decapitalize,
   escapeNonPrintableMapper,
   firstUpperWordStyle,
   isAscii,
   isDigit,
   isLetter,
   isPrintable,
+  snakeCase,
   splitIntoWords,
   standardUnicodeHexEscape,
   utf16ConcatMap,
-  utf16LegalizeCharacters,
+  utf16LegalizeCharacters
 } from "quicktype-core/dist/support/Strings";
 import { defined } from "quicktype-core/dist/support/Support";
 import { TargetLanguage } from "quicktype-core/dist/TargetLanguage";
 import {
-ArrayType,
-    ClassProperty,
-    ClassType,
-    EnumType,
-    MapType,
-    ObjectType,
-    PrimitiveType,
-    Type,
-    UnionType
+  ClassProperty,
+  ClassType,
+  EnumType,
+  Type,
+  UnionType
 } from "quicktype-core/dist/Type";
 import {
   directlyReachableSingleNamedType,
@@ -50,26 +46,7 @@ import {
   nullableFromUnion,
 } from "quicktype-core/dist/TypeUtils";
 
-import {
-    allLowerWordStyle,
-    allUpperWordStyle,
-    camelCase,
-    combineWords,
-    escapeNonPrintableMapper,
-    firstUpperWordStyle,
-    intToHex,
-    isDigit,
-    isLetterOrUnderscore,
-    isNumeric,
-    isPrintable,
-    legalizeCharacters,
-    splitIntoWords,
-    utf32ConcatMap
-} from "quicktype-core/dist/support/Strings";
-import { assertNever, mustNotHappen } from "quicktype-core/dist/support/Support";
-import { matchType, nullableFromUnion, removeNullFromUnion } from "quicktype-core/dist/TypeUtils";
-import { RenderContext } from "quicktype-core/dist/Renderer";
-import { acronymOption, acronymStyle, AcronymStyleOptions } from "quicktype-core/dist/support/Acronyms";
+import { acronymOption, AcronymStyleOptions } from "quicktype-core/dist/support/Acronyms";
 
 export enum Framework {
   None,
@@ -459,18 +436,18 @@ export class CustomDartRenderer extends ConvenienceRenderer {
   }
 
   protected emitBlock(line: Sourcelike, f: () => void): void {
-    this.emitLine(line, "(");
+    this.emitLine(line, "{");
     this.indent(f);
-    this.emitLine(")");
+    this.emitLine("}");
   }
 
   protected dartType(t: Type, withIssues: boolean = false, nullable: boolean = false): Sourcelike {
     return matchType<Sourcelike>(
       t,
-      (_anyType) => maybeAnnotated(withIssues, anyTypeIssueAnnotation, "Any?"),
-      (_nullType) => maybeAnnotated(withIssues, nullTypeIssueAnnotation, "Any?"),
+      (_anyType) => maybeAnnotated(withIssues, anyTypeIssueAnnotation, "Object"),
+      (_nullType) => maybeAnnotated(withIssues, nullTypeIssueAnnotation, "Object"),
       (_boolType) => "Boolean",
-      (_integerType) => "Int",
+      (_integerType) => "Long",
       (_doubleType) => "Double",
       (_stringType) => "String",
       (arrayType) => ["List<", this.dartType(arrayType.items, withIssues), ">"],
@@ -482,7 +459,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
       (unionType) => {
         const maybeNullable = nullableFromUnion(unionType);
         if (maybeNullable === null) {
-          return "Any?";
+          return "Object";
         }
         return this.dartType(maybeNullable, withIssues);
       },
@@ -628,7 +605,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
   protected emitClassDefinition(c: ClassType, className: Name): void {
     this.emitDescription(this.descriptionForType(c));
 
-    this.emitBlock(["data class ", className], () => {
+    this.emitBlock(["class ", className], () => {
       if (c.getProperties().size === 0) {
         this.emitLine("/* No properties */");
       } else {
@@ -642,9 +619,9 @@ export class CustomDartRenderer extends ConvenienceRenderer {
           const description = this.descriptionForClassProperty(c, jsonName);
           const type = this.dartType(property.type, true);
 
-          if (this.customDartOption.useSerializable && jsonName !== name.namingFunction.nameStyle(jsonName)) {
+          if (true|| this.customDartOption.useSerializable && jsonName !== name.namingFunction.nameStyle(jsonName)) {
             this.ensureBlankLine();
-            this.emitLine("@SerializedName(",'"', jsonName, '"',") ");
+            this.emitLine("@TableField(",'"', snakeCase(jsonName), '"',") ");
           }
 
           if (description !== undefined) {
@@ -666,11 +643,11 @@ export class CustomDartRenderer extends ConvenienceRenderer {
           }
 
           this.emitLine(
-            "val ",
-            name,
-            ": ",
+            "private ",
             isDynamic? "Any": type,
-            letBeNull? '? = null,': ","
+            " ",
+            name,
+            ";",
           );
         });
       }
@@ -723,7 +700,7 @@ export class CustomDartRenderer extends ConvenienceRenderer {
     }
 
     if (this.customDartOption.useSerializable) {
-      this.emitLine('import com.google.gson.annotations.SerializedName');
+      this.emitLine('import com.baomidou.mybatisplus.annotation.TableField;');
     }
 
 
